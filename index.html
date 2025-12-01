@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎄</text></svg>">
 </head>
 <body>
     <div class="container">
@@ -86,13 +87,31 @@
                                 <th>Дата</th>
                             </tr>
                         </thead>
-                        <tbody id="leaderboard-body">
-                        </tbody>
+                        <tbody id="leaderboard-body"></tbody>
                     </table>
                 </div>
-                <button class="btn clear-btn" id="clear-leaderboard">
-                    <i class="fas fa-trash"></i> Очистить таблицу
-                </button>
+                <div class="modal-actions">
+                    <button class="btn clear-btn" id="clear-leaderboard">
+                        <i class="fas fa-trash"></i> Очистить таблицу
+                    </button>
+                    <button class="btn close-modal-btn" id="close-modal">
+                        <i class="fas fa-times"></i> Закрыть
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="confirmation-modal" id="confirmation-modal">
+            <div class="confirmation-content">
+                <h3 id="confirmation-message"></h3>
+                <div class="confirmation-actions">
+                    <button class="btn confirm-btn" id="confirm-action">
+                        <i class="fas fa-check"></i> Да
+                    </button>
+                    <button class="btn cancel-btn" id="cancel-action">
+                        <i class="fas fa-times"></i> Нет
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -101,6 +120,6 @@
         <p>С Новым Годом! 🎄 Управление: стрелки клавиатуры или свайпы на мобильных</p>
     </footer>
 
-    <script src="game.js"></script>
+    <script type="module" src="game.js"></script>
 </body>
 </html>
