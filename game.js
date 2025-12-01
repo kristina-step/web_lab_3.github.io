@@ -197,7 +197,6 @@ class Game2048 {
         let pointsEarned = 0;
         let moved = false;
         
-        // Выполняем движение
         switch (direction) {
             case 'left':
                 pointsEarned = this.processMove('left');
@@ -220,7 +219,6 @@ class Game2048 {
         if (moved) {
             this.score += pointsEarned;
             
-            // Добавляем в историю
             this.history.push(oldState);
             if (this.history.length > 10) {
                 this.history.shift();
@@ -270,14 +268,12 @@ class Game2048 {
         let previous = null;
         let skip = false;
         
-        // Собираем все ненулевые значения
         for (let col = 0; col < this.gridSize; col++) {
             if (this.grid[row][col] !== 0) {
                 newRow.push(this.grid[row][col]);
             }
         }
         
-        // Объединяем соседние одинаковые значения
         for (let i = 0; i < newRow.length; i++) {
             if (!skip && i < newRow.length - 1 && newRow[i] === newRow[i + 1]) {
                 newRow[i] *= 2;
@@ -289,12 +285,10 @@ class Game2048 {
             }
         }
         
-        // Заполняем нулями до нужной длины
         while (newRow.length < this.gridSize) {
             newRow.push(0);
         }
         
-        // Обновляем строку
         this.grid[row] = newRow;
         return points;
     }
@@ -305,14 +299,12 @@ class Game2048 {
         let previous = null;
         let skip = false;
         
-        // Собираем все ненулевые значения справа налево
         for (let col = this.gridSize - 1; col >= 0; col--) {
             if (this.grid[row][col] !== 0) {
                 newRow.push(this.grid[row][col]);
             }
         }
         
-        // Объединяем соседние одинаковые значения
         for (let i = 0; i < newRow.length; i++) {
             if (!skip && i < newRow.length - 1 && newRow[i] === newRow[i + 1]) {
                 newRow[i] *= 2;
@@ -324,12 +316,10 @@ class Game2048 {
             }
         }
         
-        // Заполняем нулями до нужной длины
         while (newRow.length < this.gridSize) {
             newRow.push(0);
         }
         
-        // Разворачиваем и обновляем строку
         newRow.reverse();
         this.grid[row] = newRow;
         return points;
@@ -340,14 +330,12 @@ class Game2048 {
         const newColumn = [];
         let skip = false;
         
-        // Собираем все ненулевые значения сверху вниз
         for (let row = 0; row < this.gridSize; row++) {
             if (this.grid[row][col] !== 0) {
                 newColumn.push(this.grid[row][col]);
             }
         }
-        
-        // Объединяем соседние одинаковые значения
+
         for (let i = 0; i < newColumn.length; i++) {
             if (!skip && i < newColumn.length - 1 && newColumn[i] === newColumn[i + 1]) {
                 newColumn[i] *= 2;
@@ -358,13 +346,11 @@ class Game2048 {
                 skip = false;
             }
         }
-        
-        // Заполняем нулями до нужной длины
+
         while (newColumn.length < this.gridSize) {
             newColumn.push(0);
         }
-        
-        // Обновляем столбец
+
         for (let row = 0; row < this.gridSize; row++) {
             this.grid[row][col] = newColumn[row];
         }
@@ -376,15 +362,13 @@ class Game2048 {
         let points = 0;
         const newColumn = [];
         let skip = false;
-        
-        // Собираем все ненулевые значения снизу вверх
+
         for (let row = this.gridSize - 1; row >= 0; row--) {
             if (this.grid[row][col] !== 0) {
                 newColumn.push(this.grid[row][col]);
             }
         }
-        
-        // Объединяем соседние одинаковые значения
+
         for (let i = 0; i < newColumn.length; i++) {
             if (!skip && i < newColumn.length - 1 && newColumn[i] === newColumn[i + 1]) {
                 newColumn[i] *= 2;
@@ -395,13 +379,11 @@ class Game2048 {
                 skip = false;
             }
         }
-        
-        // Заполняем нулями до нужной длины
+
         while (newColumn.length < this.gridSize) {
             newColumn.push(0);
         }
-        
-        // Разворачиваем и обновляем столбец
+
         newColumn.reverse();
         for (let row = 0; row < this.gridSize; row++) {
             this.grid[row][col] = newColumn[row];
@@ -422,7 +404,6 @@ class Game2048 {
     }
     
     isGameOver() {
-        // Проверяем, есть ли пустые клетки
         for (let row = 0; row < this.gridSize; row++) {
             for (let col = 0; col < this.gridSize; col++) {
                 if (this.grid[row][col] === 0) {
@@ -431,16 +412,13 @@ class Game2048 {
             }
         }
         
-        // Проверяем, есть ли возможные слияния
         for (let row = 0; row < this.gridSize; row++) {
             for (let col = 0; col < this.gridSize; col++) {
                 const current = this.grid[row][col];
-                
-                // Проверка правого соседа
+
                 if (col < this.gridSize - 1 && this.grid[row][col + 1] === current) {
                     return false;
                 }
-                // Проверка нижнего соседа
                 if (row < this.gridSize - 1 && this.grid[row + 1][col] === current) {
                     return false;
                 }
@@ -476,10 +454,8 @@ class Game2048 {
         
         this.leaderboard.push(scoreData);
         
-        // Сортируем по убыванию очков
         this.leaderboard.sort((a, b) => b.score - a.score || b.timestamp - a.timestamp);
         
-        // Оставляем только топ-10
         if (this.leaderboard.length > 10) {
             this.leaderboard = this.leaderboard.slice(0, 10);
         }
@@ -519,7 +495,6 @@ class Game2048 {
             tbody.appendChild(row);
         });
         
-        // Если таблица пуста
         if (this.leaderboard.length === 0) {
             const row = document.createElement('tr');
             const cell = document.createElement('td');
@@ -532,6 +507,267 @@ class Game2048 {
             tbody.appendChild(row);
         }
     }
+
+    showGameOver() {
+        const gameOverElement = document.getElementById('game-over');
+        const finalScoreElement = document.getElementById('final-score');
+        
+        if (gameOverElement && finalScoreElement) {
+            finalScoreElement.textContent = this.score;
+            gameOverElement.classList.add('show');
+            
+            const savedMessage = document.getElementById('saved-message');
+            const playerNameInput = document.getElementById('player-name');
+            const saveButton = document.getElementById('save-score');
+            
+            if (savedMessage) savedMessage.textContent = '';
+            if (playerNameInput) {
+                playerNameInput.value = '';
+                playerNameInput.style.display = 'block';
+            }
+            if (saveButton) saveButton.style.display = 'flex';
+        }
+    }
+    
+    hideGameOver() {
+        const gameOverElement = document.getElementById('game-over');
+        if (gameOverElement) {
+            gameOverElement.classList.remove('show');
+        }
+    }
+    
+    showLeaderboard() {
+        this.updateLeaderboard();
+        const modal = document.getElementById('leaderboard-modal');
+        if (modal) {
+            modal.classList.add('show');
+        }
+    }
+    
+    hideLeaderboard() {
+        const modal = document.getElementById('leaderboard-modal');
+        if (modal) {
+            modal.classList.remove('show');
+        }
+    }
+    
+    clearLeaderboard() {
+        if (confirm('Вы уверены, что хотите очистить таблицу рекордов?')) {
+            this.leaderboard = [];
+            localStorage.removeItem('game2048_leaderboard');
+            this.updateLeaderboard();
+            alert('Таблица рекордов очищена!');
+        }
+    }
+    
+    setupEventListeners() {
+        document.addEventListener('keydown', (e) => {
+            if (this.gameOver) return;
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    this.move('left');
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    this.move('right');
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    this.move('up');
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    this.move('down');
+                    break;
+                case 'z':
+                case 'Z':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        this.undo();
+                    }
+                    break;
+            }
+        });
+        
+        const gridElement = document.getElementById('grid');
+        if (gridElement) {
+            gridElement.addEventListener('touchstart', (e) => {
+                this.touchStartX = e.touches[0].clientX;
+                this.touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            
+            gridElement.addEventListener('touchend', (e) => {
+                if (!this.touchStartX || !this.touchStartY) return;
+                
+                const touchEndX = e.changedTouches[0].clientX;
+                const touchEndY = e.changedTouches[0].clientY;
+                
+                const diffX = this.touchStartX - touchEndX;
+                const diffY = this.touchStartY - touchEndY;
+                
+                const minSwipeDistance = 30;
+                
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (Math.abs(diffX) > minSwipeDistance) {
+                        if (diffX > 0) {
+                            this.move('left');
+                        } else {
+                            this.move('right');
+                        }
+                    }
+                } else {
+                    if (Math.abs(diffY) > minSwipeDistance) {
+                        if (diffY > 0) {
+                            this.move('up');
+                        } else {
+                            this.move('down');
+                        }
+                    }
+                }
+                
+                this.touchStartX = 0;
+                this.touchStartY = 0;
+            }, { passive: true });
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM загружен, инициализация игры...');
+
+    gameInstance = new Game2048();
+
+    setupGlobalEventListeners();
+    
+    console.log('Игра 2048 инициализирована!');
+    console.log('Управление: стрелки клавиатуры или свайпы на мобильных');
+    console.log('Ctrl+Z или кнопка "Отмена хода" - отменить последний ход');
+});
+
+function setupGlobalEventListeners() {
+    const newGameBtn = document.getElementById('new-game');
+    if (newGameBtn) {
+        newGameBtn.addEventListener('click', () => {
+            console.log('Кнопка "Новая игра" нажата');
+            if (gameInstance) {
+                gameInstance.startGame();
+            }
+        });
+    }
+    
+    const undoBtn = document.getElementById('undo');
+    if (undoBtn) {
+        undoBtn.addEventListener('click', () => {
+            if (gameInstance) {
+                gameInstance.undo();
+            }
+        });
+    }
+    
+    const showLeadersBtn = document.getElementById('show-leaders');
+    if (showLeadersBtn) {
+        showLeadersBtn.addEventListener('click', () => {
+            if (gameInstance) {
+                gameInstance.showLeaderboard();
+            }
+        });
+    }
+    
+    const closeLeaderboardBtn = document.getElementById('close-leaderboard');
+    if (closeLeaderboardBtn) {
+        closeLeaderboardBtn.addEventListener('click', () => {
+            if (gameInstance) {
+                gameInstance.hideLeaderboard();
+            }
+        });
+    }
+    
+    const clearLeaderboardBtn = document.getElementById('clear-leaderboard');
+    if (clearLeaderboardBtn) {
+        clearLeaderboardBtn.addEventListener('click', () => {
+            if (gameInstance) {
+                gameInstance.clearLeaderboard();
+            }
+        });
+    }
+    
+    const restartBtn = document.getElementById('restart');
+    if (restartBtn) {
+        restartBtn.addEventListener('click', () => {
+            if (gameInstance) {
+                gameInstance.startGame();
+            }
+        });
+    }
+    
+    const saveScoreBtn = document.getElementById('save-score');
+    if (saveScoreBtn) {
+        saveScoreBtn.addEventListener('click', () => {
+            if (!gameInstance) return;
+            
+            const nameInput = document.getElementById('player-name');
+            if (!nameInput) return;
+            
+            const playerName = nameInput.value.trim();
+            if (!playerName) {
+                alert('Пожалуйста, введите ваше имя!');
+                return;
+            }
+            
+            const savedName = gameInstance.saveScoreToLeaderboard(playerName);
+            
+            const savedMessage = document.getElementById('saved-message');
+            if (savedMessage) {
+                savedMessage.textContent = `Рекорд ${savedName} сохранен! 🎉`;
+                savedMessage.style.color = '#90ee90';
+            }
+            
+            if (nameInput) nameInput.style.display = 'none';
+            if (saveScoreBtn) saveScoreBtn.style.display = 'none';
+            
+            setTimeout(() => {
+                if (gameInstance) {
+                    gameInstance.showLeaderboard();
+                }
+            }, 1500);
+        });
+    }
+    
+    const playerNameInput = document.getElementById('player-name');
+    if (playerNameInput) {
+        playerNameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const saveScoreBtn = document.getElementById('save-score');
+                if (saveScoreBtn) {
+                    saveScoreBtn.click();
+                }
+            }
+        });
+    }
+    
+    const leaderboardModal = document.getElementById('leaderboard-modal');
+    if (leaderboardModal) {
+        leaderboardModal.addEventListener('click', (e) => {
+            if (e.target === leaderboardModal && gameInstance) {
+                gameInstance.hideLeaderboard();
+            }
+        });
+    }
+    
+    const mobileButtons = ['up', 'down', 'left', 'right'];
+    mobileButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', () => {
+                if (gameInstance) {
+                    gameInstance.move(id);
+                }
+            });
+        }
+    });
+}
     
 
 window.gameInstance = gameInstance;
