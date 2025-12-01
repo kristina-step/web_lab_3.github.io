@@ -71,4 +71,491 @@ body::before {
     animation: twinkle 2s infinite reverse;
 }
 
+@keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
 
+.title {
+    font-family: 'Mountains of Christmas', cursive;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ffd700;
+    text-shadow: 3px 3px 0 #8b0000;
+    letter-spacing: 2px;
+}
+
+.score-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.score-box {
+    background: linear-gradient(145deg, #1a5c3c, #0d3b2a);
+    padding: 15px 30px;
+    border-radius: 10px;
+    min-width: 150px;
+    border: 2px solid #daa520;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.score-label {
+    font-size: 1.2rem;
+    color: #ffd700;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.score {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 0 #8b0000;
+}
+
+.game-info {
+    background: rgba(218, 165, 32, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 3px solid #8b0000;
+}
+
+.instructions {
+    font-size: 1.2rem;
+    color: #8b0000;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    background: linear-gradient(145deg, #8b0000, #660000);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: bold;
+    border: 2px solid #ffd700;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(145deg, #a60000, #800000);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.mobile-controls {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+.mobile-row {
+    display: flex;
+    gap: 20px;
+}
+
+.mobile-btn {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(145deg, #8b0000, #660000);
+    border: 3px solid #ffd700;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.mobile-btn:active {
+    transform: scale(0.95);
+    background: linear-gradient(145deg, #a60000, #800000);
+}
+
+.game-container {
+    position: relative;
+    background: rgba(139, 0, 0, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 3px solid #daa520;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1;
+    margin: 0 auto;
+    background: rgba(218, 165, 32, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.grid-cell {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 2rem;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.grid-cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 30%, rgba(255, 255, 255, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.grid-cell:hover::before {
+    opacity: 1;
+}
+
+.tile {
+    position: absolute;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 2rem;
+    transition: all 0.15s ease;
+    z-index: 2;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.game-over {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.game-over.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.game-over-content {
+    background: linear-gradient(145deg, #1a5c3c, #0d3b2a);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    border: 3px solid #daa520;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.game-over-content h2 {
+    color: #ffd700;
+    margin-bottom: 20px;
+    font-family: 'Mountains of Christmas', cursive;
+    font-size: 2.5rem;
+}
+
+.save-score {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#player-name {
+    padding: 15px;
+    font-size: 1.2rem;
+    border: 2px solid #daa520;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    color: #333;
+}
+
+#player-name:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.save-btn {
+    background: linear-gradient(145deg, #006400, #004d00);
+}
+
+.restart-btn {
+    background: linear-gradient(145deg, #8b0000, #660000);
+    margin-top: 20px;
+}
+
+.saved-message {
+    color: #90ee90;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-height: 30px;
+    margin: 10px 0;
+}
+
+.leaderboard-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.leaderboard-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #0d3b2a, #1a5c3c);
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 3px solid #daa520;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    color: #ffd700;
+    font-family: 'Mountains of Christmas', cursive;
+    font-size: 2.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+}
+
+.leaderboard-table {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background: rgba(218, 165, 32, 0.9);
+    color: #8b0000;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.1rem;
+}
+
+tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+tbody tr:hover {
+    background: rgba(218, 165, 32, 0.3);
+}
+
+tbody tr:first-child {
+    background: linear-gradient(145deg, #ffd700, #daa520);
+    color: #8b0000;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+tbody tr:first-child td {
+    border-bottom: 2px solid #8b0000;
+}
+
+.clear-btn {
+    background: linear-gradient(145deg, #8b0000, #660000);
+    margin-top: 20px;
+    width: 100%;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    color: #ffd700;
+    font-size: 1.1rem;
+    width: 100%;
+    background: rgba(139, 0, 0, 0.9);
+    border-radius: 15px;
+    border: 3px solid #daa520;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.2rem;
+    }
+    
+    .score-box {
+        min-width: 120px;
+        padding: 10px 20px;
+    }
+    
+    .score {
+        font-size: 2rem;
+    }
+    
+    .controls {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .mobile-controls {
+        display: flex;
+    }
+    
+    .grid {
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .tile {
+        font-size: 1.5rem;
+    }
+    
+    .game-over-content {
+        padding: 20px;
+    }
+    
+    .modal-content {
+        padding: 20px;
+    }
+    
+    .modal-header h2 {
+        font-size: 2rem;
+    }
+    
+    th, td {
+        padding: 10px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.8rem;
+    }
+    
+    .score-box {
+        min-width: 100px;
+        padding: 8px 15px;
+    }
+    
+    .score {
+        font-size: 1.8rem;
+    }
+    
+    .grid {
+        gap: 8px;
+    }
+    
+    .tile {
+        font-size: 1.2rem;
+    }
+    
+    .mobile-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2rem;
+    }
+}
