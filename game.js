@@ -692,6 +692,15 @@ function setupGlobalEventListeners() {
             }
         });
     }
+
+    const closeModalBtn = document.getElementById('close-modal');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            if (gameInstance) {
+                gameInstance.hideLeaderboard();
+            }
+        });
+    }
     
     const restartBtn = document.getElementById('restart');
     if (restartBtn) {
