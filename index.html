@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новогодняя 2048</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title"><i class="fas fa-tree"></i> Новогодняя 2048 <i class="fas fa-snowflake"></i></h1>
+            <div class="score-container">
+                <div class="score-box">
+                    <div class="score-label">Счет</div>
+                    <div class="score" id="score">0</div>
+                </div>
+                <div class="score-box">
+                    <div class="score-label">Рекорд</div>
+                    <div class="score" id="best-score">0</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="game-info">
+            <p class="instructions">Объединяйте одинаковые новогодние подарки, чтобы получить 2048!</p>
+            <div class="controls">
+                <button class="btn" id="new-game">
+                    <i class="fas fa-gift"></i> Новая игра
+                </button>
+                <button class="btn" id="undo">
+                    <i class="fas fa-undo"></i> Отмена хода
+                </button>
+                <button class="btn" id="show-leaders">
+                    <i class="fas fa-trophy"></i> Лидеры
+                </button>
+            </div>
+        </div>
+
+        <div class="mobile-controls">
+            <div class="mobile-row">
+                <button class="mobile-btn" id="up"><i class="fas fa-chevron-up"></i></button>
+            </div>
+            <div class="mobile-row">
+                <button class="mobile-btn" id="left"><i class="fas fa-chevron-left"></i></button>
+                <button class="mobile-btn" id="down"><i class="fas fa-chevron-down"></i></button>
+                <button class="mobile-btn" id="right"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <div class="grid" id="grid"></div>
+            <div class="game-over" id="game-over">
+                <div class="game-over-content">
+                    <h2><i class="fas fa-star"></i> Игра окончена! <i class="fas fa-star"></i></h2>
+                    <p>Ваш счет: <span id="final-score">0</span></p>
+                    <div class="save-score">
+                        <input type="text" id="player-name" placeholder="Введите ваше имя" maxlength="20">
+                        <button class="btn save-btn" id="save-score">
+                            <i class="fas fa-save"></i> Сохранить результат
+                        </button>
+                    </div>
+                    <p class="saved-message" id="saved-message"></p>
+                    <button class="btn restart-btn" id="restart">
+                        <i class="fas fa-redo"></i> Начать заново
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="leaderboard-modal" id="leaderboard-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-crown"></i> Таблица рекордов <i class="fas fa-crown"></i></h2>
+                    <button class="close-btn" id="close-leaderboard">&times;</button>
+                </div>
+                <div class="leaderboard-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Место</th>
+                                <th>Имя</th>
+                                <th>Счет</th>
+                                <th>Дата</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn clear-btn" id="clear-leaderboard">
+                    <i class="fas fa-trash"></i> Очистить таблицу
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>С Новым Годом! 🎄 Управление: стрелки клавиатуры или свайпы на мобильных</p>
+    </footer>
+
+    <script src="game.js"></script>
+</body>
+</html>
