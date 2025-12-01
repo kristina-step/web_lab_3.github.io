@@ -197,6 +197,341 @@ class Game2048 {
         let pointsEarned = 0;
         let moved = false;
         
-
+        // Выполняем движение
+        switch (direction) {
+            case 'left':
+                pointsEarned = this.processMove('left');
+                moved = pointsEarned > 0 || this.checkIfGridChanged(oldState.grid);
+                break;
+            case 'right':
+                pointsEarned = this.processMove('right');
+                moved = pointsEarned > 0 || this.checkIfGridChanged(oldState.grid);
+                break;
+            case 'up':
+                pointsEarned = this.processMove('up');
+                moved = pointsEarned > 0 || this.checkIfGridChanged(oldState.grid);
+                break;
+            case 'down':
+                pointsEarned = this.processMove('down');
+                moved = pointsEarned > 0 || this.checkIfGridChanged(oldState.grid);
+                break;
+        }
+        
+        if (moved) {
+            this.score += pointsEarned;
+            
+            // Добавляем в историю
+            this.history.push(oldState);
+            if (this.history.length > 10) {
+                this.history.shift();
+            }
+            
+            this.addRandomTile();
+            this.saveState();
+            this.updateView();
+        }
+        
+        this.isMoving = false;
+        return moved;
+    }
+    
+    processMove(direction) {
+        let points = 0;
+        
+        switch (direction) {
+            case 'left':
+                for (let row = 0; row < this.gridSize; row++) {
+                    points += this.processRowLeft(row);
+                }
+                break;
+            case 'right':
+                for (let row = 0; row < this.gridSize; row++) {
+                    points += this.processRowRight(row);
+                }
+                break;
+            case 'up':
+                for (let col = 0; col < this.gridSize; col++) {
+                    points += this.processColumnUp(col);
+                }
+                break;
+            case 'down':
+                for (let col = 0; col < this.gridSize; col++) {
+                    points += this.processColumnDown(col);
+                }
+                break;
+        }
+        
+        return points;
+    }
+    
+    processRowLeft(row) {
+        let points = 0;
+        const newRow = [];
+        let previous = null;
+        let skip = false;
+        
+        // Собираем все ненулевые значения
+        for (let col = 0; col < this.gridSize; col++) {
+            if (this.grid[row][col] !== 0) {
+                newRow.push(this.grid[row][col]);
+            }
+        }
+        
+        // Объединяем соседние одинаковые значения
+        for (let i = 0; i < newRow.length; i++) {
+            if (!skip && i < newRow.length - 1 && newRow[i] === newRow[i + 1]) {
+                newRow[i] *= 2;
+                points += newRow[i];
+                newRow.splice(i + 1, 1);
+                skip = true;
+            } else {
+                skip = false;
+            }
+        }
+        
+        // Заполняем нулями до нужной длины
+        while (newRow.length < this.gridSize) {
+            newRow.push(0);
+        }
+        
+        // Обновляем строку
+        this.grid[row] = newRow;
+        return points;
+    }
+    
+    processRowRight(row) {
+        let points = 0;
+        const newRow = [];
+        let previous = null;
+        let skip = false;
+        
+        // Собираем все ненулевые значения справа налево
+        for (let col = this.gridSize - 1; col >= 0; col--) {
+            if (this.grid[row][col] !== 0) {
+                newRow.push(this.grid[row][col]);
+            }
+        }
+        
+        // Объединяем соседние одинаковые значения
+        for (let i = 0; i < newRow.length; i++) {
+            if (!skip && i < newRow.length - 1 && newRow[i] === newRow[i + 1]) {
+                newRow[i] *= 2;
+                points += newRow[i];
+                newRow.splice(i + 1, 1);
+                skip = true;
+            } else {
+                skip = false;
+            }
+        }
+        
+        // Заполняем нулями до нужной длины
+        while (newRow.length < this.gridSize) {
+            newRow.push(0);
+        }
+        
+        // Разворачиваем и обновляем строку
+        newRow.reverse();
+        this.grid[row] = newRow;
+        return points;
+    }
+    
+    processColumnUp(col) {
+        let points = 0;
+        const newColumn = [];
+        let skip = false;
+        
+        // Собираем все ненулевые значения сверху вниз
+        for (let row = 0; row < this.gridSize; row++) {
+            if (this.grid[row][col] !== 0) {
+                newColumn.push(this.grid[row][col]);
+            }
+        }
+        
+        // Объединяем соседние одинаковые значения
+        for (let i = 0; i < newColumn.length; i++) {
+            if (!skip && i < newColumn.length - 1 && newColumn[i] === newColumn[i + 1]) {
+                newColumn[i] *= 2;
+                points += newColumn[i];
+                newColumn.splice(i + 1, 1);
+                skip = true;
+            } else {
+                skip = false;
+            }
+        }
+        
+        // Заполняем нулями до нужной длины
+        while (newColumn.length < this.gridSize) {
+            newColumn.push(0);
+        }
+        
+        // Обновляем столбец
+        for (let row = 0; row < this.gridSize; row++) {
+            this.grid[row][col] = newColumn[row];
+        }
+        
+        return points;
+    }
+    
+    processColumnDown(col) {
+        let points = 0;
+        const newColumn = [];
+        let skip = false;
+        
+        // Собираем все ненулевые значения снизу вверх
+        for (let row = this.gridSize - 1; row >= 0; row--) {
+            if (this.grid[row][col] !== 0) {
+                newColumn.push(this.grid[row][col]);
+            }
+        }
+        
+        // Объединяем соседние одинаковые значения
+        for (let i = 0; i < newColumn.length; i++) {
+            if (!skip && i < newColumn.length - 1 && newColumn[i] === newColumn[i + 1]) {
+                newColumn[i] *= 2;
+                points += newColumn[i];
+                newColumn.splice(i + 1, 1);
+                skip = true;
+            } else {
+                skip = false;
+            }
+        }
+        
+        // Заполняем нулями до нужной длины
+        while (newColumn.length < this.gridSize) {
+            newColumn.push(0);
+        }
+        
+        // Разворачиваем и обновляем столбец
+        newColumn.reverse();
+        for (let row = 0; row < this.gridSize; row++) {
+            this.grid[row][col] = newColumn[row];
+        }
+        
+        return points;
+    }
+    
+    checkIfGridChanged(oldGrid) {
+        for (let row = 0; row < this.gridSize; row++) {
+            for (let col = 0; col < this.gridSize; col++) {
+                if (this.grid[row][col] !== oldGrid[row][col]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    isGameOver() {
+        // Проверяем, есть ли пустые клетки
+        for (let row = 0; row < this.gridSize; row++) {
+            for (let col = 0; col < this.gridSize; col++) {
+                if (this.grid[row][col] === 0) {
+                    return false;
+                }
+            }
+        }
+        
+        // Проверяем, есть ли возможные слияния
+        for (let row = 0; row < this.gridSize; row++) {
+            for (let col = 0; col < this.gridSize; col++) {
+                const current = this.grid[row][col];
+                
+                // Проверка правого соседа
+                if (col < this.gridSize - 1 && this.grid[row][col + 1] === current) {
+                    return false;
+                }
+                // Проверка нижнего соседа
+                if (row < this.gridSize - 1 && this.grid[row + 1][col] === current) {
+                    return false;
+                }
+            }
+        }
+        
+        this.gameOver = true;
+        return true;
+    }
+    
+    undo() {
+        if (this.history.length === 0) {
+            alert('Нет ходов для отмены!');
+            return;
+        }
+        
+        const lastState = this.history.pop();
+        this.grid = lastState.grid;
+        this.score = lastState.score;
+        
+        this.saveState();
+        this.updateView();
+    }
+    
+    saveScoreToLeaderboard(name) {
+        const playerName = name.trim() || 'Аноним';
+        const scoreData = {
+            name: playerName,
+            score: this.score,
+            date: new Date().toLocaleDateString('ru-RU'),
+            timestamp: Date.now()
+        };
+        
+        this.leaderboard.push(scoreData);
+        
+        // Сортируем по убыванию очков
+        this.leaderboard.sort((a, b) => b.score - a.score || b.timestamp - a.timestamp);
+        
+        // Оставляем только топ-10
+        if (this.leaderboard.length > 10) {
+            this.leaderboard = this.leaderboard.slice(0, 10);
+        }
+        
+        localStorage.setItem('game2048_leaderboard', JSON.stringify(this.leaderboard));
+        this.updateLeaderboard();
+        
+        return playerName;
+    }
+    
+    updateLeaderboard() {
+        const tbody = document.getElementById('leaderboard-body');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        
+        this.leaderboard.forEach((entry, index) => {
+            const row = document.createElement('tr');
+            
+            const placeCell = document.createElement('td');
+            placeCell.textContent = index + 1;
+            
+            const nameCell = document.createElement('td');
+            nameCell.textContent = entry.name;
+            
+            const scoreCell = document.createElement('td');
+            scoreCell.textContent = entry.score;
+            
+            const dateCell = document.createElement('td');
+            dateCell.textContent = entry.date;
+            
+            row.appendChild(placeCell);
+            row.appendChild(nameCell);
+            row.appendChild(scoreCell);
+            row.appendChild(dateCell);
+            
+            tbody.appendChild(row);
+        });
+        
+        // Если таблица пуста
+        if (this.leaderboard.length === 0) {
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 4;
+            cell.textContent = 'Пока нет рекордов';
+            cell.style.textAlign = 'center';
+            cell.style.padding = '20px';
+            cell.style.color = '#ffd700';
+            row.appendChild(cell);
+            tbody.appendChild(row);
+        }
+    }
+    
 
 window.gameInstance = gameInstance;
