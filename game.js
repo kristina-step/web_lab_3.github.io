@@ -42,8 +42,6 @@ class Game2048 {
     }
     
     startGame() {
-        console.log('Начало новой игры');
-        
         this.score = 0;
         this.gameOver = false;
         this.history = [];
@@ -58,8 +56,6 @@ class Game2048 {
         
         document.getElementById('score').textContent = '0';
         document.getElementById('best-score').textContent = this.bestScore;
-        
-        console.log('Новая игра начата успешно');
     }
     
     addRandomTile() {
@@ -113,7 +109,6 @@ class Game2048 {
                 this.history = state.history || [];
             }
         } catch (error) {
-            console.error('Ошибка загрузки из localStorage:', error);
             this.grid = Array(this.gridSize).fill().map(() => Array(this.gridSize).fill(0));
             this.score = 0;
             this.history = [];
@@ -265,7 +260,6 @@ class Game2048 {
     processRowLeft(row) {
         let points = 0;
         const newRow = [];
-        let previous = null;
         let skip = false;
         
         for (let col = 0; col < this.gridSize; col++) {
@@ -296,7 +290,6 @@ class Game2048 {
     processRowRight(row) {
         let points = 0;
         const newRow = [];
-        let previous = null;
         let skip = false;
         
         for (let col = this.gridSize - 1; col >= 0; col--) {
@@ -431,7 +424,6 @@ class Game2048 {
     
     undo() {
         if (this.history.length === 0) {
-            alert('Нет ходов для отмены!');
             return;
         }
         
@@ -552,12 +544,9 @@ class Game2048 {
     }
     
     clearLeaderboard() {
-        if (confirm('Вы уверены, что хотите очистить таблицу рекордов?')) {
-            this.leaderboard = [];
-            localStorage.removeItem('game2048_leaderboard');
-            this.updateLeaderboard();
-            alert('Таблица рекордов очищена!');
-        }
+        this.leaderboard = [];
+        localStorage.removeItem('game2048_leaderboard');
+        this.updateLeaderboard();
     }
     
     setupEventListeners() {
@@ -635,22 +624,14 @@ class Game2048 {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM загружен, инициализация игры...');
-
     gameInstance = new Game2048();
-
     setupGlobalEventListeners();
-    
-    console.log('Игра 2048 инициализирована!');
-    console.log('Управление: стрелки клавиатуры или свайпы на мобильных');
-    console.log('Ctrl+Z или кнопка "Отмена хода" - отменить последний ход');
 });
 
 function setupGlobalEventListeners() {
     const newGameBtn = document.getElementById('new-game');
     if (newGameBtn) {
         newGameBtn.addEventListener('click', () => {
-            console.log('Кнопка "Новая игра" нажата');
             if (gameInstance) {
                 gameInstance.startGame();
             }
@@ -721,7 +702,6 @@ function setupGlobalEventListeners() {
             
             const playerName = nameInput.value.trim();
             if (!playerName) {
-                alert('Пожалуйста, введите ваше имя!');
                 return;
             }
             
@@ -777,6 +757,5 @@ function setupGlobalEventListeners() {
         }
     });
 }
-    
 
 window.gameInstance = gameInstance;
